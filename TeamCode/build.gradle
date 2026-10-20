@@ -1,3 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url "https://repo.dairy.foundation/releases"
+        }
+    }
+    dependencies {
+        classpath "dev.frozenmilk:Load:0.3.2"
+    }
+}
 apply plugin: 'com.android.application'
 
 //
@@ -15,6 +27,7 @@ apply plugin: 'com.android.application'
 // Include common definitions from above.
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
+apply plugin: 'dev.frozenmilk.sinister.sloth.load'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
@@ -55,9 +68,12 @@ dependencies {
     implementation "com.acmerobotics.dashboard:dashboard:0.5.1" // FTC Dashboard
 
     // Pedro Pathing
-    implementation 'com.pedropathing:revhub:3.0.0'
-    implementation 'com.pedropathing:tuning:1.0.0' // AutoTune (see Tuning.java)
+    implementation 'com.pedropathing:revhub:3.0.2'
+    implementation 'com.pedropathing:tuning:1.0.2' // AutoTune (see Tuning.java)
 
     // Panels Dashboard
     implementation "com.bylazar:fullpanels:1.0.12"
+
+    // Sloth
+    implementation "dev.frozenmilk.sinister:Sloth:0.3.2"
 }

@@ -47,6 +47,7 @@ public class Tuning {
                 hardwareMap -> new Mecanum(hardwareMap, Constants.drivetrainConfig),
                 hardwareMap -> new PinpointLocalizer(hardwareMap, Constants.localizerConfig),
                 () -> new Foresight(Constants.foresightConfig)
+
         );
     }
 }
