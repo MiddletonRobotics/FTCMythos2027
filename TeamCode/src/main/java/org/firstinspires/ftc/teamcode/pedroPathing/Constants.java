@@ -22,11 +22,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
  * If you use a different drivetrain or localizer, swap the config classes and {@link #createFollower} to match.
  */
 public class Constants {
-    public static MecanumConfig drivetrainConfig = new MecanumConfig(c -> {
-        c.frontLeftName.set("lf");
-        c.backLeftName.set("lr");
-        c.frontRightName.set("rf");
-        c.backRightName.set("rr");
+    public static MecanumConfig drivetrainConfig = new MecanumConfig(
+            c -> {
+        c.frontLeftName.set("frontLeft");
+        c.backLeftName.set("backLeft");
+        c.frontRightName.set("rightFront");
+        c.backRightName.set("backRight");
 
         c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
         c.backLeftDirection.set(DcMotorSimple.Direction.REVERSE);
@@ -34,6 +35,8 @@ public class Constants {
         c.backRightDirection.set(DcMotorSimple.Direction.FORWARD);
 
         c.powerThreshold.set(0.01);
+
+        // Set to true for manual brake mode
         c.manualBrakeMode.set(false);
     });
 
@@ -43,7 +46,7 @@ public class Constants {
         c.yPodOffset.set(0.5);
         c.offsetUnits.set(DistanceUnit.INCH);
         c.globalDistanceUnit.set(DistanceUnit.INCH);
-        c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        c.podType.set(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_SWINGARM_POD);
         c.xPodDirection.set(GoBildaPinpointDriver.EncoderDirection.REVERSED);
         c.yPodDirection.set(GoBildaPinpointDriver.EncoderDirection.FORWARD);
     });
