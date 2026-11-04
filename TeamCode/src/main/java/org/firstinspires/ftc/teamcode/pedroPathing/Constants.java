@@ -26,7 +26,7 @@ public class Constants {
             c -> {
         c.frontLeftName.set("frontLeft");
         c.backLeftName.set("backLeft");
-        c.frontRightName.set("rightFront");
+        c.frontRightName.set("frontRight");
         c.backRightName.set("backRight");
 
         c.frontLeftDirection.set(DcMotorSimple.Direction.REVERSE);
