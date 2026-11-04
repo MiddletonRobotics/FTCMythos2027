@@ -28,12 +28,6 @@ public class DodOp extends CommandOpMode {
     private GamepadButton shooterForward;
     private GamepadButton shooterBackward;
 
-    // shooter individual controls
-    private GamepadButton pollenFlyForward;
-    private GamepadButton pollenFlyBackward;
-    private GamepadButton nectarFlyForward;
-    private GamepadButton nectarFlyBackward;
-
     @Override
     public void initialize() {
         robot = new Mythos(hardwareMap, telemetry);
@@ -50,13 +44,7 @@ public class DodOp extends CommandOpMode {
         transferIn = new GamepadButton(driver1, GamepadKeys.Button.X);
         transferOut = new GamepadButton(driver1, GamepadKeys.Button.Y);
 
-        // shooter (individual)
-        pollenFlyForward = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
-        pollenFlyBackward = new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT);
-        nectarFlyForward = new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT);
-        nectarFlyBackward = new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
-
-        // shooter (both)
+        // shooter
         shooterForward = new GamepadButton(driver1, GamepadKeys.Button.LEFT_STICK_BUTTON);
         shooterBackward = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_STICK_BUTTON);
 
@@ -73,15 +61,9 @@ public class DodOp extends CommandOpMode {
         transferIn.whileActiveContinuous(() -> robot.transfer.transfer(1));
         transferOut.whileActiveContinuous(() -> robot.transfer.transfer(-1));
 
-        // shooter (individual)
-        pollenFlyForward.whileActiveContinuous(() -> robot.shooter.setPollenFly(1));
-        pollenFlyBackward.whileActiveContinuous(() -> robot.shooter.setPollenFly(-1));
-        nectarFlyForward.whileActiveContinuous(() -> robot.shooter.setNectarFly(1));
-        nectarFlyBackward.whileActiveContinuous(() -> robot.shooter.setNectarFly(-1));
-
-        // shooter (both)
-        shooterForward.whileActiveContinuous(() -> robot.shooter.setShooter(1));
-        shooterBackward.whileActiveContinuous(() -> robot.shooter.setShooter(-1));
+        // shooter
+        shooterForward.whileActiveContinuous(() -> robot.shooter.set(1));
+        shooterBackward.whileActiveContinuous(() -> robot.shooter.set(-1));
     }
 
     public void configureDefaultDodOpCommands() {

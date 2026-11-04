@@ -1,21 +1,29 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.button.GamepadButton;
+import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.Commands.DrivetrainController;
-
 import org.firstinspires.ftc.teamcode.Subsystems.Mythos;
 
 public class TeleOpBindings {
+    // constants
+    private final int SHOOTER_DESIRED_RPM = 2000;
+
     private final GamepadEx driver1;
     private final GamepadEx driver2;
     private final Mythos robot;
 
-    // intake button declerations
+    // intake button declarations
     private final GamepadButton intakeIn;
     private final GamepadButton intakeOut;
+
+    // shooter button declarations
+    private final Trigger shooterForward;
+    // private final Trigger shooterAutomated; // for when I get the transfer automation done
 
     public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Mythos robot) {
         this.driver1 = driver1;
@@ -23,15 +31,23 @@ public class TeleOpBindings {
         this.robot = robot;
 
         // intake
-        // button a is bottom, button b is left on the PS controller
         intakeIn = new GamepadButton(driver1, GamepadKeys.Button.A);
         intakeOut = new GamepadButton(driver1, GamepadKeys.Button.B);
+
+        // shooter
+        shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
     }
 
     public void controlMap() {
         // intake
         intakeIn.whileActiveContinuous(() -> robot.intake.intake(1));
         intakeOut.whileActiveContinuous(() -> robot.intake.intake(-1));
+
+        // shooter
+        shooterForward.whileActiveContinuous(new StartEndCommand(
+                () -> robot.shooter.setVelocity(SHOOTER_DESIRED_RPM),
+                () -> robot.shooter.set(0)
+        ));
     }
 
     public void configureDefaultCommands() {

@@ -3,47 +3,55 @@ package org.firstinspires.ftc.teamcode.Subsystems;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
+import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Shooter extends SubsystemBase {
-    private final Motor pollenFly;
-    private final Motor nectarFly;
-
+    private final MotorEx shooter;
     private final Telemetry telemetry;
 
-    // this is assuming that the robot is viewed from my intake forward
-    public Shooter(final HardwareMap hMap, final String name, Telemetry telemetry) {
-        pollenFly = new Motor(hMap, "pollenFly", Motor.GoBILDA.BARE);
-        nectarFly = new Motor(hMap, "nectarFly", Motor.GoBILDA.BARE);
+    // Default starting constants for velocity control (tune later as needed)
+    private static final double DEFAULT_KP = 1.0;
+    private static final double DEFAULT_KI = 0.0;
+    private static final double DEFAULT_KD = 0.0;
+    private static final double DEFAULT_KS = 0.0;
+    private static final double DEFAULT_KV = 0.0;
 
-        pollenFly.setRunMode(Motor.RunMode.RawPower);
-        nectarFly.setRunMode(Motor.RunMode.RawPower);
+    public Shooter(final HardwareMap hMap, final String name, Telemetry telemetry) {
+        shooter = new MotorEx(hMap, "shooter", Motor.GoBILDA.BARE);
+
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
+
+        // set starting PID and feedforward coefficients so velocity control functions
+        setVeloCoefficients(DEFAULT_KP, DEFAULT_KI, DEFAULT_KD);
+        setFeedforwardCoefficients(DEFAULT_KS, DEFAULT_KV);
 
         this.telemetry = telemetry;
     }
 
     public void periodic() {
-        double pollenTicksPerSecond = pollenFly.getCorrectedVelocity();
-        double nectarTicksPerSecond = nectarFly.getCorrectedVelocity();
+        double ticksPerSecond = shooter.getCorrectedVelocity();
+        double rpm = (ticksPerSecond / shooter.getCPR()) * 60;
 
-        double pollenRPM = (pollenTicksPerSecond / pollenFly.getCPR()) * 60;
-        double nectarRPM = (nectarTicksPerSecond / nectarFly.getCPR()) * 60;
-
-        telemetry.addData("Pollen RPM", pollenRPM);
-        telemetry.addData("Nectar RPM", nectarRPM);
+        telemetry.addData("Shooter RPM", rpm);
     }
 
-    public void setPollenFly(double power) {
-        pollenFly.set(power);
+    public void setVelocity(double rpm) {
+        double ticksPerSec = (rpm * shooter.getCPR()) / 60.0;
+        shooter.setVelocity(ticksPerSec);
     }
 
-    public void setNectarFly(double power) {
-        nectarFly.set(power);
+    // backward compatible / raw power method
+    public void set(double power) {
+        shooter.set(power);
     }
 
-    public void setShooter(double power) {
-        pollenFly.set(power);
-        nectarFly.set(power);
+    public void setVeloCoefficients(double kp, double ki, double kd) {
+        shooter.setVeloCoefficients(kp, ki, kd);
+    }
+
+    public void setFeedforwardCoefficients(double ks, double kv) {
+        shooter.setFeedforwardCoefficients(ks, kv);
     }
 }
