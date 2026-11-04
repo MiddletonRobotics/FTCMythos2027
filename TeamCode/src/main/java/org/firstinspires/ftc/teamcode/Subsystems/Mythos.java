@@ -14,6 +14,6 @@ public class Mythos {
         drivetrain = new Drivetrain(hardwareMap, "Drivetrain");
         intake = new Intake(hardwareMap, "Intake");
         transfer = new Transfer(hardwareMap, "Transfer");
-        shooter = new Shooter(hardwareMap, "Shooter");
+        shooter = new Shooter(hardwareMap, "Shooter", telemetry);
     }
 }
