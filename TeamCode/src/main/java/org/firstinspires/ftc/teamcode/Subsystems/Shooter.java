@@ -41,7 +41,6 @@ public class Shooter extends SubsystemBase {
     }
 
     public void periodic() {
-        // Dynamically update coefficients from FTC panels / dashboard edits
         setVeloCoefficients(kp, ki, kd);
         setFeedforwardCoefficients(ks, kv);
 
