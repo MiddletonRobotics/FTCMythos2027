@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.Subsystems.Mythos;
 
 public class TeleOpBindings {
     // constants
-    private final int SHOOTER_DESIRED_RPM = 2000;
+    private final int SHOOTER_DESIRED_RPM = 3000;
 
     private final GamepadEx driver1;
     private final GamepadEx driver2;
@@ -68,7 +68,7 @@ public class TeleOpBindings {
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(
                 () -> robot.shooter.setVelocity(SHOOTER_DESIRED_RPM),
-                () -> robot.shooter.set(0)
+                () -> robot.shooter.stop()
         ));
     }
 
