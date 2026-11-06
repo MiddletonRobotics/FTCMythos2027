@@ -10,7 +10,7 @@ public class Transfer extends SubsystemBase {
     private final ServoEx switchServo;
 
     // max offset angle for switch servo
-    private static final double MAX_ANGLE = 15.223947696;
+    private static final double MAX_ANGLE = 14.75;
 
     // servo switch angle is 15.223947696 degrees
     public Transfer(final HardwareMap hMap, final String name) {
@@ -38,6 +38,10 @@ public class Transfer extends SubsystemBase {
 
     public void moveToPositivePoint() {
         setSwitchPosition(MAX_ANGLE);
+    }
+
+    public void moveSwitchToZero() {
+        setSwitchPosition(0);
     }
 
     public double getSwitchRotation() {

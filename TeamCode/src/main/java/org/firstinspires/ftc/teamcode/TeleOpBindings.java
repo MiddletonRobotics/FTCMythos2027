@@ -51,6 +51,7 @@ public class TeleOpBindings {
     private final GamepadButton D2TransferOut;
     private final Trigger D2SwitchServoLeft;
     private final GamepadButton D2SwitchServoRight;
+    private final GamepadButton ServoReset;
 
     // shooter
     private final Trigger D2ShooterForward;
@@ -94,6 +95,7 @@ public class TeleOpBindings {
         D2TransferOut = new GamepadButton(driver2, GamepadKeys.Button.DPAD_RIGHT);
         D2SwitchServoLeft = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1);
         D2SwitchServoRight = new GamepadButton(driver2, GamepadKeys.Button.LEFT_BUMPER);
+        ServoReset =  new GamepadButton(driver2, GamepadKeys.Button.LEFT_STICK_BUTTON);
 
         // shooter
         D2ShooterForward = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
@@ -163,6 +165,7 @@ public class TeleOpBindings {
         ));
         D2SwitchServoLeft.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveToNegativePoint(), robot.transfer));
         D2SwitchServoRight.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveToPositivePoint(), robot.transfer));
+        ServoReset.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveSwitchToZero(), robot.transfer));
 
         // shooter
         D2ShooterForward.whileActiveContinuous(new StartEndCommand(
