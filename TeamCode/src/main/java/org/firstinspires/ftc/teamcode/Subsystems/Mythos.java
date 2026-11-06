@@ -13,7 +13,7 @@ public class Mythos {
     public Mythos(HardwareMap hardwareMap, Telemetry telemetry) {
         drivetrain = new Drivetrain(hardwareMap, "Drivetrain");
         intake = new Intake(hardwareMap, "Intake");
-        transfer = new Transfer(hardwareMap, "Transfer");
+        transfer = new Transfer(hardwareMap, "Transfer", telemetry);
         shooter = new Shooter(hardwareMap, "Shooter", telemetry);
     }
 }
