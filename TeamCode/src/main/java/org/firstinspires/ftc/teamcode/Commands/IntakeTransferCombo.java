@@ -46,7 +46,7 @@ public class IntakeTransferCombo extends CommandBase {
 
     public void run(double speed) {
         setSpeed(speed);
-        intake.intake(speed);
+        intake.intake(-speed);
         transfer.transfer(speed);
     }
 
@@ -57,7 +57,7 @@ public class IntakeTransferCombo extends CommandBase {
     @Override
     public void execute() {
         double currentSpeed = speedSupplier.getAsDouble();
-        intake.intake(currentSpeed);
+        intake.intake(-currentSpeed);
         transfer.transfer(currentSpeed);
     }
 
