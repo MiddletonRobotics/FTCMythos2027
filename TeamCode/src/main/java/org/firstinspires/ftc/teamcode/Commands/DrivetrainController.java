@@ -10,19 +10,19 @@ public class DrivetrainController extends CommandBase {
 
     private final Drivetrain drivetrain;
     private final DoubleSupplier d_forward;
-    private final DoubleSupplier d_rotation;
     private final DoubleSupplier d_strafe;
+    private final DoubleSupplier d_rotation;
 
     public DrivetrainController(
             Drivetrain subsystem,
             DoubleSupplier forward,
-            DoubleSupplier rotation,
-            DoubleSupplier strafe) {
+            DoubleSupplier strafe,
+            DoubleSupplier rotation) {
 
         drivetrain = subsystem;
         d_forward = forward;
-        d_rotation = rotation;
         d_strafe = strafe;
+        d_rotation = rotation;
 
         addRequirements(drivetrain);
     }
@@ -30,8 +30,8 @@ public class DrivetrainController extends CommandBase {
     @Override
     public void execute() {
         drivetrain.drive(
-                d_strafe.getAsDouble(),
                 d_forward.getAsDouble(),
+                d_strafe.getAsDouble(),
                 d_rotation.getAsDouble()
         );
     }

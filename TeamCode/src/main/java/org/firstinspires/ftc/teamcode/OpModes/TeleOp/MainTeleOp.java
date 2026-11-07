@@ -8,23 +8,23 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import org.firstinspires.ftc.teamcode.Subsystems.Mythos;
 import org.firstinspires.ftc.teamcode.TeleOpBindings;
 
-@TeleOp (name = "RedTeleOp")
-public class RedTeleOp extends CommandOpMode {
+@TeleOp(name = "MainTeleOp")
+public class MainTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
         // Initialize robot, which contains subsystems
         Mythos robot = new Mythos(hardwareMap, telemetry);
 
-        // set starting heading for red alliance (180 degrees)
-        robot.drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(180)));
+        // Reset follower pose for TeleOp
+        robot.drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(0)));
 
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
 
-        // init controller bindings
+        // Init controller bindings
         TeleOpBindings bindings = new TeleOpBindings(driver1, driver2, robot);
 
-        // actually set the bindings to the control map, and config the default commands
+        // Set control map bindings and configure default commands
         bindings.controlMap();
         bindings.configureDefaultCommands();
     }

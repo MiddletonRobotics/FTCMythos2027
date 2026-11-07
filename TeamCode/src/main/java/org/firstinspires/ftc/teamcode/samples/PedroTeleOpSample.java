@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.samples;
 
-
 import com.pedropathing.follower.Follower;
-import com.pedropathing.follower.ManualDrive;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.util.TelemetryData;
@@ -24,19 +22,12 @@ public class PedroTeleOpSample extends CommandOpMode {
     public void run() {
         super.run();
 
-        /* Robot-Centric Drive
-        follower.manual(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x);
-        */
-
-        // Field-Centric Drive
-        // Pedro uses +x forwards, +y left and counterclockwise positive, while the gamepad sticks read positive to the
-        // right and down, so all three axes are negated (the same as Pedro's own quickstart)
-        follower.manual(ManualDrive.fieldCentric(
+        // Robot-Centric Drive
+        follower.manual(
                 -gamepad1.left_stick_y,
                 -gamepad1.left_stick_x,
-                -gamepad1.right_stick_x,
-                follower.pose().heading()
-        ));
+                -gamepad1.right_stick_x
+        );
         follower.update();
 
         telemetryData.addData("X", follower.pose().x());
