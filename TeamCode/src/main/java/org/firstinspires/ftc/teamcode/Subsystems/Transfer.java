@@ -59,9 +59,9 @@ public class Transfer extends SubsystemBase {
     public String getSwitchRotationCorrected() {
         double rotation = getSwitchRotation();
         if (rotation < -0.5) {
-            return "Left";
-        } else if (rotation > 0.5) {
             return "Right";
+        } else if (rotation > 0.5) {
+            return "Left";
         } else {
             return "Center";
         }
