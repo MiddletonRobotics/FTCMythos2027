@@ -181,8 +181,8 @@ public class TeleOpBindings {
     public void configureDefaultCommands() {
         robot.drivetrain.setDefaultCommand(new DrivetrainController(
                 robot.drivetrain,
-                () -> driver1.getLeftX(),
                 () -> -driver1.getLeftY(),
+                () -> driver1.getLeftX(),
                 () -> driver1.getRightX()
         ));
     }

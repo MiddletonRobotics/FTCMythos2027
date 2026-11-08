@@ -14,7 +14,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void drive(double forward, double strafe, double rotation) {
-        follower.manual(strafe, forward, rotation);
+        follower.manual(forward, strafe, rotation);
     }
 
     @Override

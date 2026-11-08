@@ -9,9 +9,9 @@ import java.util.function.DoubleSupplier;
 public class DrivetrainController extends CommandBase {
 
     private final Drivetrain drivetrain;
-    private final DoubleSupplier d_forward;
-    private final DoubleSupplier d_strafe;
-    private final DoubleSupplier d_rotation;
+    private final DoubleSupplier forwardSupplier;
+    private final DoubleSupplier strafeSupplier;
+    private final DoubleSupplier rotationSupplier;
 
     public DrivetrainController(
             Drivetrain subsystem,
@@ -20,9 +20,9 @@ public class DrivetrainController extends CommandBase {
             DoubleSupplier rotation) {
 
         drivetrain = subsystem;
-        d_forward = forward;
-        d_strafe = strafe;
-        d_rotation = rotation;
+        forwardSupplier = forward;
+        strafeSupplier = strafe;
+        rotationSupplier = rotation;
 
         addRequirements(drivetrain);
     }
@@ -30,9 +30,9 @@ public class DrivetrainController extends CommandBase {
     @Override
     public void execute() {
         drivetrain.drive(
-                d_forward.getAsDouble(),
-                d_strafe.getAsDouble(),
-                d_rotation.getAsDouble()
+                forwardSupplier.getAsDouble(),
+                strafeSupplier.getAsDouble(),
+                rotationSupplier.getAsDouble()
         );
     }
 }

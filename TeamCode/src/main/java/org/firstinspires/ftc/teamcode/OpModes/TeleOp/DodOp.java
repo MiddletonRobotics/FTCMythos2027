@@ -69,9 +69,9 @@ public class DodOp extends CommandOpMode {
     public void configureDefaultDodOpCommands() {
         robot.drivetrain.setDefaultCommand(new DrivetrainController(
                 robot.drivetrain,
-                () -> driver1.getLeftY(),
-                () -> driver1.getRightX(),
-                () -> driver1.getLeftX()
+                () -> -driver1.getLeftY(),
+                () -> driver1.getLeftX(),
+                () -> driver1.getRightX()
         ));
     }
 
