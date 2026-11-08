@@ -12,19 +12,15 @@ import org.firstinspires.ftc.teamcode.TeleOpBindings;
 public class MainTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
-        // Initialize robot, which contains subsystems
         Mythos robot = new Mythos(hardwareMap, telemetry);
 
-        // Reset follower pose for TeleOp
         robot.drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(0)));
 
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
 
-        // Init controller bindings
         TeleOpBindings bindings = new TeleOpBindings(driver1, driver2, robot);
 
-        // Set control map bindings and configure default commands
         bindings.controlMap();
         bindings.configureDefaultCommands();
     }

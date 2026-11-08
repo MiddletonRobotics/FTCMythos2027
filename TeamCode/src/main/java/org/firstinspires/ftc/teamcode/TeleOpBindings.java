@@ -136,7 +136,7 @@ public class TeleOpBindings {
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(
                 () -> robot.shooter.setVelocity(SHOOTER_DESIRED_RPM),
-                () -> robot.shooter.stop()
+                () -> robot.shooter.set(0)
         ));
 
         // DRIVER 2
@@ -170,7 +170,7 @@ public class TeleOpBindings {
         // shooter
         D2ShooterForward.whileActiveContinuous(new StartEndCommand(
                 () -> robot.shooter.setVelocity(SHOOTER_DESIRED_RPM),
-                () -> robot.shooter.stop()
+                () -> robot.shooter.set(0)
         ));
 
         // shooter speedup and slowdown

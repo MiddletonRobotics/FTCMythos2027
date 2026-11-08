@@ -17,14 +17,12 @@ public class Shooter extends SubsystemBase {
     private final VoltageSensor voltageSensor;
     private final Telemetry telemetry;
 
-    // Editable PDIF constants for FTC panels and dashboard live tuning
     public static double kp = 1.7   ;
     public static double ki = 0.0;
     public static double kd = 0.25;
     public static double ks = 0.0;
     public static double kv = 0.0;
 
-    // Nominal voltage at which PID was tuned (adjustable in dashboard)
     public static double nominalVoltage = 13.0;
 
     public Shooter(final HardwareMap hMap, final String name, Telemetry telemetry) {
@@ -55,15 +53,10 @@ public class Shooter extends SubsystemBase {
         shooter.setVelocity(ticksPerSec);
     }
 
-    public void stop() {
-        shooter.setRunMode(Motor.RunMode.RawPower);
-        shooter.set(0);
-        shooter.setRunMode(Motor.RunMode.VelocityControl);
-    }
-
-    // backward compatible / raw power method
     public void set(double power) {
+        shooter.setRunMode(Motor.RunMode.RawPower);
         shooter.set(power);
+        shooter.setRunMode(Motor.RunMode.VelocityControl);
     }
 
     public void setVeloCoefficients(double kp, double ki, double kd) {
