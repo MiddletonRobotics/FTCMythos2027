@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.samples;
+package org.firstinspires.ftc.teamcode.utilities.samples;
 
 import static com.pedropathing.api.Paths.line;
 

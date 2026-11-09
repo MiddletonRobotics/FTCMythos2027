@@ -8,6 +8,8 @@ import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.utilities.MotorMath;
+
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @Config
@@ -17,7 +19,7 @@ public class Shooter extends SubsystemBase {
     private final VoltageSensor voltageSensor;
     private final Telemetry telemetry;
 
-    public static double kp = 1.7   ;
+    public static double kp = 1.7;
     public static double ki = 0.0;
     public static double kd = 0.25;
     public static double ks = 0.0;
@@ -43,7 +45,7 @@ public class Shooter extends SubsystemBase {
         setFeedforwardCoefficients(ks, kv);
 
         double ticksPerSecond = shooter.getCorrectedVelocity();
-        double rpm = (ticksPerSecond / shooter.getCPR()) * 60;
+        double rpm = MotorMath.ticksPerSecondToRPM(ticksPerSecond, MotorMath.GoBildaMotor.RPM_6000);
 
         telemetry.addData("Shooter RPM", rpm);
     }
