@@ -19,7 +19,6 @@ public class TeleOpBindings {
     private int SHOOTER_DESIRED_RPM = 3000;
 
     private final GamepadEx driver1;
-    private final GamepadEx driver2;
     private final Drivetrain drivetrain;
     private final Intake intake;
     private final Transfer transfer;
@@ -37,8 +36,6 @@ public class TeleOpBindings {
     // transfer button declarations
     private final GamepadButton transferIn;
     private final GamepadButton transferOut;
-    // private final GamepadButton switchServoLeft;
-    // private final GamepadButton switchServoRight;
 
     // shooter button declarations
     private final Trigger shooterForward;
@@ -55,9 +52,6 @@ public class TeleOpBindings {
     // transfer
     private final GamepadButton D2TransferIn;
     private final GamepadButton D2TransferOut;
-    // private final Trigger D2SwitchServoLeft;
-    // private final GamepadButton D2SwitchServoRight;
-    private final GamepadButton ServoReset;
 
     // shooter
     private final Trigger D2ShooterForward;
@@ -66,7 +60,6 @@ public class TeleOpBindings {
 
     public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Transfer transfer, Shooter shooter) {
         this.driver1 = driver1;
-        this.driver2 = driver2;
         this.drivetrain = drivetrain;
         this.intake = intake;
         this.transfer = transfer;
@@ -84,8 +77,6 @@ public class TeleOpBindings {
         // transfer
         transferIn = new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
         transferOut = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
-        // switchServoLeft = new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT);
-        // switchServoRight =  new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT);
 
         // shooter
         shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
@@ -102,9 +93,6 @@ public class TeleOpBindings {
         // transfer
         D2TransferIn = new GamepadButton(driver2, GamepadKeys.Button.DPAD_UP);
         D2TransferOut = new GamepadButton(driver2, GamepadKeys.Button.DPAD_RIGHT);
-        // D2SwitchServoLeft = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1);
-        // D2SwitchServoRight = new GamepadButton(driver2, GamepadKeys.Button.LEFT_BUMPER);
-        ServoReset =  new GamepadButton(driver2, GamepadKeys.Button.LEFT_STICK_BUTTON);
 
         // shooter
         D2ShooterForward = new Trigger(() -> driver2.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
@@ -131,8 +119,6 @@ public class TeleOpBindings {
         intakeTransferOut.whileActiveContinuous(new IntakeTransferCombo(intake, transfer, -1.0));
 
         // transfer
-        // switchServoLeft.whileActiveOnce(new InstantCommand(() -> transfer.moveToNegativePoint(), transfer));
-        // switchServoRight.whileActiveOnce(new InstantCommand(() -> transfer.moveToPositivePoint(), transfer));
         transferIn.whileActiveContinuous(new StartEndCommand(
                 () -> transfer.transfer(1),
                 () -> transfer.transfer(0)
@@ -172,9 +158,6 @@ public class TeleOpBindings {
                 () -> transfer.transfer(-1),
                 () -> transfer.transfer(0)
         ));
-        // D2SwitchServoLeft.whileActiveOnce(new InstantCommand(() -> transfer.moveToNegativePoint(), transfer));
-        // D2SwitchServoRight.whileActiveOnce(new InstantCommand(() -> transfer.moveToPositivePoint(), transfer));
-        ServoReset.whileActiveOnce(new InstantCommand(() -> transfer.moveSwitchToZero(), transfer));
 
         // shooter
         D2ShooterForward.whileActiveContinuous(new StartEndCommand(
