@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
  * Shows every constructor of the Pedro commands, run one after another in a SequentialCommandGroup.
  * For a full autonomous, look at PedroAutoSample.
  */
-@Autonomous
+// @Autonomous
 public class PedroCommands extends CommandOpMode {
     Follower follower;
 
