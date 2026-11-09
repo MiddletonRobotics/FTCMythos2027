@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
 
     public static double nominalVoltage = 13.0;
 
-    public Shooter(final HardwareMap hMap, final String name, Telemetry telemetry) {
+    public Shooter(final HardwareMap hMap, Telemetry telemetry) {
         shooter = new MotorEx(hMap, "shooter", Motor.GoBILDA.BARE);
         voltageSensor = hMap.voltageSensor.iterator().next();
 

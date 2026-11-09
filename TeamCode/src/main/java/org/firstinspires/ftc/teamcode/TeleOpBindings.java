@@ -7,9 +7,12 @@ import com.seattlesolvers.solverslib.command.button.Trigger;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
-import org.firstinspires.ftc.teamcode.Commands.DrivetrainController;
-import org.firstinspires.ftc.teamcode.Commands.IntakeTransferCombo;
-import org.firstinspires.ftc.teamcode.Subsystems.Mythos;
+import org.firstinspires.ftc.teamcode.commands.DrivetrainController;
+import org.firstinspires.ftc.teamcode.commands.IntakeTransferCombo;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Shooter;
+import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 public class TeleOpBindings {
     // constants
@@ -17,7 +20,10 @@ public class TeleOpBindings {
 
     private final GamepadEx driver1;
     private final GamepadEx driver2;
-    private final Mythos robot;
+    private final Drivetrain drivetrain;
+    private final Intake intake;
+    private final Transfer transfer;
+    private final Shooter shooter;
 
     // DRIVER 1
     // intake button declarations
@@ -58,10 +64,13 @@ public class TeleOpBindings {
     private final GamepadButton shooterSpeedUp;
     private final GamepadButton shooterSpeedDown;
 
-    public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Mythos robot) {
+    public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Transfer transfer, Shooter shooter) {
         this.driver1 = driver1;
         this.driver2 = driver2;
-        this.robot = robot;
+        this.drivetrain = drivetrain;
+        this.intake = intake;
+        this.transfer = transfer;
+        this.shooter = shooter;
 
         // DRIVER 1
         // intake
@@ -109,68 +118,68 @@ public class TeleOpBindings {
         // DRIVER 1
         // intake
         intakeIn.whileActiveContinuous(new StartEndCommand(
-                () -> robot.intake.intake(1),
-                () -> robot.intake.intake(0)
+                () -> intake.intake(1),
+                () -> intake.intake(0)
         ));
         intakeOut.whileActiveContinuous(new StartEndCommand(
-                () -> robot.intake.intake(-1),
-                () -> robot.intake.intake(0)
+                () -> intake.intake(-1),
+                () -> intake.intake(0)
         ));
 
         // intake transfer combo
-        intakeTransferIn.whileActiveContinuous(new IntakeTransferCombo(robot.intake, robot.transfer, 1.0));
-        intakeTransferOut.whileActiveContinuous(new IntakeTransferCombo(robot.intake, robot.transfer, -1.0));
+        intakeTransferIn.whileActiveContinuous(new IntakeTransferCombo(intake, transfer, 1.0));
+        intakeTransferOut.whileActiveContinuous(new IntakeTransferCombo(intake, transfer, -1.0));
 
         // transfer
-        // switchServoLeft.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveToNegativePoint(), robot.transfer));
-        // switchServoRight.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveToPositivePoint(), robot.transfer));
+        // switchServoLeft.whileActiveOnce(new InstantCommand(() -> transfer.moveToNegativePoint(), transfer));
+        // switchServoRight.whileActiveOnce(new InstantCommand(() -> transfer.moveToPositivePoint(), transfer));
         transferIn.whileActiveContinuous(new StartEndCommand(
-                () -> robot.transfer.transfer(1),
-                () -> robot.transfer.transfer(0)
+                () -> transfer.transfer(1),
+                () -> transfer.transfer(0)
         ));
         transferOut.whileActiveContinuous(new StartEndCommand(
-                () -> robot.transfer.transfer(-1),
-                () -> robot.transfer.transfer(0)
+                () -> transfer.transfer(-1),
+                () -> transfer.transfer(0)
         ));
 
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(
-                () -> robot.shooter.setVelocity(SHOOTER_DESIRED_RPM),
-                () -> robot.shooter.set(0)
+                () -> shooter.setVelocity(SHOOTER_DESIRED_RPM),
+                () -> shooter.set(0)
         ));
 
         // DRIVER 2
         // intake
         D2IntakeIn.whileActiveContinuous(new StartEndCommand(
-                () -> robot.intake.intake(1),
-                () -> robot.intake.intake(0)
+                () -> intake.intake(1),
+                () -> intake.intake(0)
         ));
         D2IntakeOut.whileActiveContinuous(new StartEndCommand(
-                () -> robot.intake.intake(-1),
-                () -> robot.intake.intake(0)
+                () -> intake.intake(-1),
+                () -> intake.intake(0)
         ));
 
         // intake transfer combo (right stick)
-        D2IntakeTransferIn.whileActiveContinuous(new IntakeTransferCombo(robot.intake, robot.transfer, 1.0));
-        D2IntakeTransferOut.whileActiveContinuous(new IntakeTransferCombo(robot.intake, robot.transfer, -1.0));
+        D2IntakeTransferIn.whileActiveContinuous(new IntakeTransferCombo(intake, transfer, 1.0));
+        D2IntakeTransferOut.whileActiveContinuous(new IntakeTransferCombo(intake, transfer, -1.0));
 
         // transfer
         D2TransferIn.whileActiveContinuous(new StartEndCommand(
-                () -> robot.transfer.transfer(1),
-                () -> robot.transfer.transfer(0)
+                () -> transfer.transfer(1),
+                () -> transfer.transfer(0)
         ));
         D2TransferOut.whileActiveContinuous(new StartEndCommand(
-                () -> robot.transfer.transfer(-1),
-                () -> robot.transfer.transfer(0)
+                () -> transfer.transfer(-1),
+                () -> transfer.transfer(0)
         ));
-        // D2SwitchServoLeft.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveToNegativePoint(), robot.transfer));
-        // D2SwitchServoRight.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveToPositivePoint(), robot.transfer));
-        ServoReset.whileActiveOnce(new InstantCommand(() -> robot.transfer.moveSwitchToZero(), robot.transfer));
+        // D2SwitchServoLeft.whileActiveOnce(new InstantCommand(() -> transfer.moveToNegativePoint(), transfer));
+        // D2SwitchServoRight.whileActiveOnce(new InstantCommand(() -> transfer.moveToPositivePoint(), transfer));
+        ServoReset.whileActiveOnce(new InstantCommand(() -> transfer.moveSwitchToZero(), transfer));
 
         // shooter
         D2ShooterForward.whileActiveContinuous(new StartEndCommand(
-                () -> robot.shooter.setVelocity(SHOOTER_DESIRED_RPM),
-                () -> robot.shooter.set(0)
+                () -> shooter.setVelocity(SHOOTER_DESIRED_RPM),
+                () -> shooter.set(0)
         ));
 
         // shooter speedup and slowdown
@@ -179,8 +188,8 @@ public class TeleOpBindings {
     }
 
     public void configureDefaultCommands() {
-        robot.drivetrain.setDefaultCommand(new DrivetrainController(
-                robot.drivetrain,
+        drivetrain.setDefaultCommand(new DrivetrainController(
+                drivetrain,
                 () -> -driver1.getLeftY(),
                 () -> driver1.getLeftX(),
                 () -> driver1.getRightX()

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Subsystems;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
@@ -16,7 +16,7 @@ public class Transfer extends SubsystemBase {
     private static final double MAX_ANGLE = 14.75;
 
     // servo switch angle is 15.223947696 degrees
-    public Transfer(final HardwareMap hMap, final String name, Telemetry telemetry) {
+    public Transfer(final HardwareMap hMap, Telemetry telemetry) {
         transferMotor = new Motor(hMap, "transferMotor", Motor.GoBILDA.RPM_312);
         switchServo = new ServoEx(hMap, "switchServo", 0, (MAX_ANGLE * 2));
 
