@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.seattlesolvers.solverslib.command.InstantCommand;
 import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.button.GamepadButton;
 import com.seattlesolvers.solverslib.command.button.Trigger;
@@ -8,6 +7,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.commands.DrivetrainController;
+import org.firstinspires.ftc.teamcode.commands.IntakeTransfer;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 public class TeleOpBindings {
     // constants
-    private int SHOOTER_DESIRED_RPM = 3300;
+    private static final int SHOOTER_DESIRED_RPM = 3300;
 
     private final GamepadEx driver1;
     private final Drivetrain drivetrain;
@@ -25,8 +25,13 @@ public class TeleOpBindings {
 
     // DRIVER 1
     // intake button declarations
-    private final GamepadButton intakeIn;
+    private final Trigger intakeIn;
     private final GamepadButton intakeOut;
+
+    private final GamepadButton transferSideIn;
+    private final GamepadButton transferSideOut;
+    private final GamepadButton transferIn;
+    private final GamepadButton transferOut;
 
     // shooter button declarations
     private final Trigger shooterForward;
@@ -40,10 +45,14 @@ public class TeleOpBindings {
 
         // DRIVER 1
         // intake
-        intakeIn = new GamepadButton(driver1, GamepadKeys.Button.Y);
-        intakeOut = new GamepadButton(driver1, GamepadKeys.Button.X);
+        intakeIn = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
+        intakeOut = new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER);
 
         // transfer
+        transferSideIn = new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
+        transferSideOut = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
+        transferIn = new GamepadButton(driver1, GamepadKeys.Button.Y);
+        transferOut = new GamepadButton(driver1, GamepadKeys.Button.X);
 
         // shooter
         shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1);
@@ -62,6 +71,10 @@ public class TeleOpBindings {
         ));
 
         // transfer
+        transferSideIn.whileActiveContinuous(new IntakeTransfer(intake, transfer, 1));
+        transferSideOut.whileActiveContinuous(new IntakeTransfer(intake, transfer, -1));
+        transferIn.whileActiveContinuous(new IntakeTransfer(intake, transfer, 1, IntakeTransfer.TransferMotor.BOTH));
+        transferOut.whileActiveContinuous(new IntakeTransfer(intake, transfer, -1, IntakeTransfer.TransferMotor.BOTH));
 
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(

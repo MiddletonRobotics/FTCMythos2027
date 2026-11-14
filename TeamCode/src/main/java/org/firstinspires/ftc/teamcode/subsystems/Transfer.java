@@ -9,6 +9,10 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Transfer extends SubsystemBase {
+    private final Double SERVO_NECTAR = 60.0;
+    private final Double SERVO_MIDDLE = 30.0;
+    private final Double SERVO_POLLEN = 0.0;
+
     private final Motor nectarMotor;
     private final Motor pollenMotor;
     private final ServoEx transferServo;
@@ -45,5 +49,18 @@ public class Transfer extends SubsystemBase {
 
     public double getTransferServo() {
         return transferServo.get();
+    }
+
+    // one is for pollen
+    // two is for nectar
+    // three is for middle
+    public int getTransferServoClean() {
+       if (getTransferServo() == SERVO_POLLEN) {
+           return 1;
+       } else if (getTransferServo() == SERVO_NECTAR) {
+           return 2;
+       } else {
+           return 3;
+       }
     }
 }
