@@ -30,8 +30,6 @@ public class TeleOpBindings {
 
     // shooter button declarations
     private final Trigger shooterForward;
-    private final GamepadButton setPollenZero;
-    private final GamepadButton setPollenOne;
 
     public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Transfer transfer, Shooter shooter) {
         this.driver1 = driver1;
@@ -48,9 +46,7 @@ public class TeleOpBindings {
         // transfer
 
         // shooter
-        shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
-        setPollenZero = new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER);
-        setPollenOne = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_BUMPER);
+        shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1);
     }
 
     public void controlMap() {
@@ -72,8 +68,6 @@ public class TeleOpBindings {
                 () -> shooter.setVelocity(SHOOTER_DESIRED_RPM),
                 () -> shooter.set(0)
         ));
-        setPollenZero.whileActiveOnce(new InstantCommand(() -> shooter.setPollenBlocker(0)));
-        setPollenOne.whileActiveOnce(new InstantCommand(() -> shooter.setPollenBlocker(1)));
     }
 
     public void configureDefaultCommands() {

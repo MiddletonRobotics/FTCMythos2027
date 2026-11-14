@@ -16,6 +16,8 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 @Config
 @Configurable
 public class Shooter extends SubsystemBase {
+    private final Double SERVO_ANGLE = 90.0;
+
     private final MotorEx shooter;
     private final ServoEx pollenBlocker;
     private final ServoEx nectarBlocker;
@@ -38,7 +40,6 @@ public class Shooter extends SubsystemBase {
 
         shooter.setRunMode(Motor.RunMode.VelocityControl);
 
-        // set starting PID and feedforward coefficients so velocity control functions
         setVeloCoefficients(kp, ki, kd);
         setFeedforwardCoefficients(ks, kv);
 
@@ -55,12 +56,30 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Shooter RPM", rpm);
     }
 
-    public void setPollenBlocker(double angle) {
-        pollenBlocker.set(angle);
+    public void pollenBlockerUp() {
+        pollenBlocker.set(0);
     }
 
-    public void setNectarBlocker(double angle) {
-        nectarBlocker.set(angle);
+    public void pollenBlockerDown() {
+        pollenBlocker.set(SERVO_ANGLE);
+    }
+
+    public void nectarBlockerUp() {
+        nectarBlocker.set(SERVO_ANGLE);
+    }
+
+    public void nectarBlockerDown() {
+        nectarBlocker.set(0);
+    }
+
+    public void blockersDown() {
+        pollenBlockerDown();
+        nectarBlockerDown();
+    }
+
+    public void blockersUp() {
+        pollenBlockerUp();
+        nectarBlockerUp();
     }
 
     public void setVelocity(double rpm) {
