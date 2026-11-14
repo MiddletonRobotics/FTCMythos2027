@@ -11,17 +11,20 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.utilities.MotorMath;
 
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 
 @Config
 @Configurable
 public class Shooter extends SubsystemBase {
     private final MotorEx shooter;
+    private final ServoEx pollenBlocker;
+    private final ServoEx nectarBlocker;
     private final VoltageSensor voltageSensor;
     private final Telemetry telemetry;
 
-    public static double kp = 1.7;
+    public static double kp = 1.25;
     public static double ki = 0.0;
-    public static double kd = 0.25;
+    public static double kd = 0.2;
     public static double ks = 0.0;
     public static double kv = 0.0;
 
@@ -29,6 +32,8 @@ public class Shooter extends SubsystemBase {
 
     public Shooter(final HardwareMap hMap, Telemetry telemetry) {
         shooter = new MotorEx(hMap, "shooter", Motor.GoBILDA.BARE);
+        pollenBlocker = new ServoEx(hMap, "pollenBlocker", 0, 355);
+        nectarBlocker = new ServoEx(hMap, "nectarBlocker", 0, 355);
         voltageSensor = hMap.voltageSensor.iterator().next();
 
         shooter.setRunMode(Motor.RunMode.VelocityControl);
@@ -48,6 +53,14 @@ public class Shooter extends SubsystemBase {
         double rpm = MotorMath.ticksPerSecondToRPM(ticksPerSecond, MotorMath.GoBildaMotor.RPM_6000);
 
         telemetry.addData("Shooter RPM", rpm);
+    }
+
+    public void setPollenBlocker(double angle) {
+        pollenBlocker.set(angle);
+    }
+
+    public void setNectarBlocker(double angle) {
+        nectarBlocker.set(angle);
     }
 
     public void setVelocity(double rpm) {
