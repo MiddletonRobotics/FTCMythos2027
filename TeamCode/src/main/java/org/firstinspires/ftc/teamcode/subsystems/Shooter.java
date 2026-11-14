@@ -54,6 +54,22 @@ public class Shooter extends SubsystemBase {
         double rpm = MotorMath.ticksPerSecondToRPM(ticksPerSecond, MotorMath.GoBildaMotor.RPM_6000);
 
         telemetry.addData("Shooter RPM", rpm);
+
+        String pollenState;
+        if (getPollenBlockerClean() == 2) {
+            pollenState = "Blocking";
+        } else {
+            pollenState = "Not Blocking";
+        }
+        telemetry.addData("Pollen Blocker", pollenState);
+
+        String nectarState;
+        if (getNectarBlockerClean() == 2) {
+            nectarState = "Blocking";
+        } else {
+            nectarState = "Not Blocking";
+        }
+        telemetry.addData("Nectar Blocker", nectarState);
     }
 
     public void pollenBlockerUp() {
@@ -75,6 +91,47 @@ public class Shooter extends SubsystemBase {
     public void blockersDown() {
         pollenBlockerDown();
         nectarBlockerDown();
+    }
+
+    public double getNectarBlocker() {
+        return nectarBlocker.get();
+    }
+
+    public double getPollenBlocker() {
+        return pollenBlocker.get();
+    }
+
+    // one is up
+    // two is down
+    public int getPollenBlockerClean() {
+        if (getPollenBlocker() == 0) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    // one is up
+    // two is down
+    public int getNectarBlockerClean() {
+        if (getNectarBlocker() == SERVO_ANGLE) {
+            return 1;
+        } else {
+            return 2;
+        }
+    }
+
+    // one is both up
+    // two is both down
+    // three is anything else
+    public int getBlockersClean() {
+        if (getPollenBlockerClean() == 1 && getNectarBlockerClean() == 1) {
+            return 1;
+        } else if (getPollenBlockerClean() == 2 && getNectarBlockerClean() == 2) {
+            return 2;
+        } else {
+            return 3;
+        }
     }
 
     public void blockersUp() {

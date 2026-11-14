@@ -9,9 +9,9 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Transfer extends SubsystemBase {
-    private final Double SERVO_NECTAR = 60.0;
-    private final Double SERVO_MIDDLE = 30.0;
-    private final Double SERVO_POLLEN = 0.0;
+    public final Double SERVO_NECTAR = (60.0 * 0.8);
+    public final Double SERVO_MIDDLE = (30.0 * 0.8);
+    public final Double SERVO_POLLEN = 0.0;
 
     private final Motor nectarMotor;
     private final Motor pollenMotor;
@@ -28,6 +28,19 @@ public class Transfer extends SubsystemBase {
         pollenMotor.setRunMode(Motor.RunMode.RawPower);
 
         this.telemetry = telemetry;
+    }
+
+    public void periodic() {
+        String servoState;
+        int cleanState = getTransferServoClean();
+        if (cleanState == 1) {
+            servoState = "Pollen";
+        } else if (cleanState == 2) {
+            servoState = "Nectar";
+        } else {
+            servoState = "Middle";
+        }
+        telemetry.addData("Transfer Servo State", servoState);
     }
 
     public void setPollenMotor(double power) {

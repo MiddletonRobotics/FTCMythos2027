@@ -76,7 +76,7 @@ public class IntakeTransfer extends CommandBase {
     }
 
     private void runMotors() {
-        intake.intake(intakeSpeed);
+        intake.intake(-intakeSpeed);
         switch (transferMotor) {
             case POLLEN:
                 transfer.setPollenMotor(transferSpeed);
