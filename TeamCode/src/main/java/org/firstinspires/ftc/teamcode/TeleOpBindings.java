@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 public class TeleOpBindings {
     // constants
-    private static final int SHOOTER_DESIRED_RPM = 3750;
+    private static final int SHOOTER_DESIRED_RPM = 3500;
 
     private final GamepadEx driver1;
     private final Drivetrain drivetrain;
@@ -32,6 +32,7 @@ public class TeleOpBindings {
     // Transfer
     private final GamepadButton transferSideIn;
     private final GamepadButton transferSideOut;
+    private final GamepadButton transferForward;
     private final GamepadButton servoPollen;
     private final GamepadButton servoNectar;
     private final GamepadButton servoMiddle;
@@ -43,8 +44,6 @@ public class TeleOpBindings {
     // shooter button declarations
     private final Trigger shooterForward;
     private final GamepadButton cycleBlockers;
-    private final GamepadButton pollenBlock;
-    private final GamepadButton blockNectar;
 
     public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Transfer transfer, Shooter shooter) {
         this.driver1 = driver1;
@@ -61,6 +60,7 @@ public class TeleOpBindings {
         // transfer
         transferSideIn = new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
         transferSideOut = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
+        transferForward = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_BUMPER);
         servoPollen = new GamepadButton(driver1, GamepadKeys.Button.A);
         servoNectar = new GamepadButton(driver1, GamepadKeys.Button.B);
         servoMiddle = new GamepadButton(driver1, GamepadKeys.Button.LEFT_STICK_BUTTON);
@@ -72,8 +72,6 @@ public class TeleOpBindings {
         // shooter
         shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
         cycleBlockers = new GamepadButton(driver1, GamepadKeys.Button.DPAD_LEFT);
-        pollenBlock = new GamepadButton(driver1, GamepadKeys.Button.DPAD_RIGHT);
-        blockNectar = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_BUMPER);
     }
 
     public void controlMap() {
@@ -97,6 +95,10 @@ public class TeleOpBindings {
                 () -> intake.intake(-1),
                 () -> intake.intake(0)
         ));
+        transferForward.whileActiveContinuous(new StartEndCommand(
+                () -> transfer.setTransferMotors(-1),
+                () -> transfer.setTransferMotors(0)
+        ));
         servoPollen.whileActiveOnce(new InstantCommand(() -> transfer.setTransferServo(transfer.SERVO_POLLEN)));
         servoNectar.whileActiveOnce(new InstantCommand(() -> transfer.setTransferServo(transfer.SERVO_NECTAR)));
         servoMiddle.whileActiveOnce(new InstantCommand(() -> transfer.setTransferServo(transfer.SERVO_MIDDLE)));
@@ -115,20 +117,6 @@ public class TeleOpBindings {
                 shooter.blockersDown();
             } else {
                 shooter.blockersUp();
-            }
-        }));
-        pollenBlock.whileActiveOnce(new InstantCommand(() -> {
-            if (shooter.getPollenBlockerClean() == 1) {
-                shooter.pollenBlockerDown();
-            } else {
-                shooter.pollenBlockerUp();
-            }
-        }));
-        blockNectar.whileActiveOnce(new InstantCommand(() -> {
-            if (shooter.getNectarBlockerClean() == 1) {
-                shooter.nectarBlockerDown();
-            } else {
-                shooter.nectarBlockerUp();
             }
         }));
     }
