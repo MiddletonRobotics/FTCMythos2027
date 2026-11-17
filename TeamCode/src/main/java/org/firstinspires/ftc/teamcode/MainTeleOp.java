@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
+import org.firstinspires.ftc.teamcode.subsystems.BallSensor;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -18,6 +19,7 @@ public class MainTeleOp extends CommandOpMode {
         Intake intake = new Intake(hardwareMap);
         Transfer transfer = new Transfer(hardwareMap, telemetry);
         Shooter shooter = new Shooter(hardwareMap, telemetry);
+        BallSensor colorSensor = new BallSensor(hardwareMap, telemetry);
 
         drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(0)));
 
