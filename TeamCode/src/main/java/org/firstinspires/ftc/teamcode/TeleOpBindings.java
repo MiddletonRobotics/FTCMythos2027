@@ -93,12 +93,24 @@ public class TeleOpBindings {
 
         // Transfer
         transferSideIn.whileActiveContinuous(new StartEndCommand(
-                () -> intake.intake(1),
-                () -> intake.intake(0)
+                () -> {
+                    if (transfer.isNectar()) {
+                        transfer.setNectarMotor(-1);
+                    } else {
+                        transfer.setPollenMotor(-1);
+                    }
+                },
+                () -> transfer.setTransferMotors(0)
         ));
         transferSideOut.whileActiveContinuous(new StartEndCommand(
-                () -> intake.intake(-1),
-                () -> intake.intake(0)
+                () -> {
+                    if (transfer.isNectar()) {
+                        transfer.setNectarMotor(1);
+                    } else {
+                        transfer.setPollenMotor(1);
+                    }
+                },
+                () -> transfer.setTransferMotors(0)
         ));
         transferForward.whileActiveContinuous(new StartEndCommand(
                 () -> transfer.setTransferMotors(-1),
