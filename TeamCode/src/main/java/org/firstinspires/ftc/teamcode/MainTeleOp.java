@@ -26,7 +26,7 @@ public class MainTeleOp extends CommandOpMode {
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
 
-        TeleOpBindings bindings = new TeleOpBindings(driver1, driver2, drivetrain, intake, transfer, shooter);
+        TeleOpBindings bindings = new TeleOpBindings(driver1, driver2, drivetrain, intake, deflower, transfer, shooter);
 
         bindings.controlMap();
         bindings.configureDefaultCommands();

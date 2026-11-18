@@ -9,6 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.commands.DrivetrainController;
 import org.firstinspires.ftc.teamcode.commands.IntakeTransfer;
+import org.firstinspires.ftc.teamcode.subsystems.Deflower;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -21,6 +22,7 @@ public class TeleOpBindings {
     private final GamepadEx driver1;
     private final Drivetrain drivetrain;
     private final Intake intake;
+    private final Deflower deflower;
     private final Transfer transfer;
     private final Shooter shooter;
 
@@ -33,22 +35,24 @@ public class TeleOpBindings {
     private final GamepadButton transferSideIn;
     private final GamepadButton transferSideOut;
     private final GamepadButton transferForward;
-    private final GamepadButton servoPollen;
-    private final GamepadButton servoNectar;
-    private final GamepadButton servoMiddle;
+    private final GamepadButton transferToggle;
 
     // Combined
     private final Trigger combinedIn;
     private final GamepadButton combinedOut;
 
+    // Flower
+    private final GamepadButton flowerToggle;
+
     // shooter button declarations
     private final Trigger shooterForward;
     private final GamepadButton cycleBlockers;
 
-    public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Transfer transfer, Shooter shooter) {
+    public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Deflower deflower, Transfer transfer, Shooter shooter) {
         this.driver1 = driver1;
         this.drivetrain = drivetrain;
         this.intake = intake;
+        this.deflower = deflower;
         this.transfer = transfer;
         this.shooter = shooter;
 
@@ -61,13 +65,14 @@ public class TeleOpBindings {
         transferSideIn = new GamepadButton(driver1, GamepadKeys.Button.DPAD_UP);
         transferSideOut = new GamepadButton(driver1, GamepadKeys.Button.DPAD_DOWN);
         transferForward = new GamepadButton(driver1, GamepadKeys.Button.RIGHT_BUMPER);
-        servoPollen = new GamepadButton(driver1, GamepadKeys.Button.A);
-        servoNectar = new GamepadButton(driver1, GamepadKeys.Button.B);
-        servoMiddle = new GamepadButton(driver1, GamepadKeys.Button.LEFT_STICK_BUTTON);
+        transferToggle = new GamepadButton(driver1, GamepadKeys.Button.A);
 
         // Combined
         combinedIn = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1);
         combinedOut = new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER);
+
+        // Flower
+        flowerToggle = new GamepadButton(driver1, GamepadKeys.Button.B);
 
         // shooter
         shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
@@ -99,13 +104,26 @@ public class TeleOpBindings {
                 () -> transfer.setTransferMotors(-1),
                 () -> transfer.setTransferMotors(0)
         ));
-        servoPollen.whileActiveOnce(new InstantCommand(() -> transfer.setTransferServo(transfer.SERVO_POLLEN)));
-        servoNectar.whileActiveOnce(new InstantCommand(() -> transfer.setTransferServo(transfer.SERVO_NECTAR)));
-        servoMiddle.whileActiveOnce(new InstantCommand(() -> transfer.setTransferServo(transfer.SERVO_MIDDLE)));
+        transferToggle.whileActiveOnce(new InstantCommand(() -> {
+            if (transfer.getTransferServoClean() == 1) {
+                transfer.setTransferServo(transfer.SERVO_NECTAR);
+            } else if (transfer.getTransferServoClean() == 2) {
+                transfer.setTransferServo(transfer.SERVO_POLLEN);
+            }
+        }));
 
         // combined
         combinedIn.whileActiveContinuous(new IntakeTransfer(intake, transfer, -1));
         combinedOut.whileActiveContinuous(new IntakeTransfer(intake, transfer, 1));
+
+        // deflower
+        flowerToggle.whileActiveOnce(new InstantCommand(() -> {
+            if (deflower.getFlowerClean() == 1) {
+                deflower.deflower();
+            } else {
+                deflower.back();
+            }
+        }));
 
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(
