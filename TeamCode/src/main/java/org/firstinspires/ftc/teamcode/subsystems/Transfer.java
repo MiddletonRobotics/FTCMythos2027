@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
@@ -17,9 +16,10 @@ public class Transfer extends SubsystemBase {
     private final Motor pollenMotor;
     private final ServoEx transferServo;
 
+    private final Intake intake;
     private final Telemetry telemetry;
 
-    public Transfer(final HardwareMap hMap, Telemetry telemetry) {
+    public Transfer(final HardwareMap hMap, Intake intake, Telemetry telemetry) {
         nectarMotor = new Motor(hMap, "nectarMotor", Motor.GoBILDA.RPM_312);
         pollenMotor = new Motor(hMap, "pollenMotor", Motor.GoBILDA.RPM_312);
         transferServo = new ServoEx(hMap, "transferServo", 0, 355);
@@ -27,10 +27,20 @@ public class Transfer extends SubsystemBase {
         nectarMotor.setRunMode(Motor.RunMode.RawPower);
         pollenMotor.setRunMode(Motor.RunMode.RawPower);
 
+        this.intake = intake;
         this.telemetry = telemetry;
     }
 
     public void periodic() {
+        // transfer servo update
+        Intake.BallColor color = intake.getBallColor();
+        if (color == Intake.BallColor.POLLEN) {
+            setTransferServo(SERVO_POLLEN);
+        } else if (color == Intake.BallColor.NECTAR) {
+            setTransferServo(SERVO_NECTAR);
+        }
+
+        // position monitor
         String servoState;
         int cleanState = getTransferServoClean();
         if (cleanState == 1) {
@@ -66,7 +76,7 @@ public class Transfer extends SubsystemBase {
 
     // one is for pollen
     // two is for nectar
-    // three is for middle
+    // three is for middle or any other state
     public int getTransferServoClean() {
        if (Math.abs(getTransferServo() - SERVO_POLLEN) < 1.0) {
            return 1;

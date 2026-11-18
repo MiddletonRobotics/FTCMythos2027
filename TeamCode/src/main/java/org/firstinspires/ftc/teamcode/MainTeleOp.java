@@ -15,8 +15,8 @@ public class MainTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
         Drivetrain drivetrain = new Drivetrain(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
-        Transfer transfer = new Transfer(hardwareMap, telemetry);
+        Intake intake = new Intake(hardwareMap, telemetry);
+        Transfer transfer = new Transfer(hardwareMap, intake, telemetry);
         Shooter shooter = new Shooter(hardwareMap, telemetry);
 
         drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(0)));
