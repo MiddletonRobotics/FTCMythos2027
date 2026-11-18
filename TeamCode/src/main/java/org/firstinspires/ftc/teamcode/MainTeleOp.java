@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.seattlesolvers.solverslib.command.CommandOpMode;
 import com.seattlesolvers.solverslib.gamepad.GamepadEx;
 
+import org.firstinspires.ftc.teamcode.subsystems.Deflower;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -16,6 +17,7 @@ public class MainTeleOp extends CommandOpMode {
     public void initialize() {
         Drivetrain drivetrain = new Drivetrain(hardwareMap);
         Intake intake = new Intake(hardwareMap, telemetry);
+        Deflower deflower = new Deflower(hardwareMap, telemetry);
         Transfer transfer = new Transfer(hardwareMap, intake, telemetry);
         Shooter shooter = new Shooter(hardwareMap, telemetry);
 
