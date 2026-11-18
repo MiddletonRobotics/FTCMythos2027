@@ -20,9 +20,10 @@ public class Transfer extends SubsystemBase {
     private final Shooter shooter;
     private final Telemetry telemetry;
 
+    private boolean isAllianceRed;
     private boolean isNectar = false;
 
-    public Transfer(final HardwareMap hMap, Intake intake, Shooter shooter, Telemetry telemetry) {
+    public Transfer(final HardwareMap hMap, Intake intake, Shooter shooter, Telemetry telemetry, boolean isAllianceRed) {
         nectarMotor = new Motor(hMap, "nectarMotor", Motor.GoBILDA.RPM_312);
         pollenMotor = new Motor(hMap, "pollenMotor", Motor.GoBILDA.RPM_312);
         transferServo = new ServoEx(hMap, "transferServo", 0, 355);
@@ -33,6 +34,7 @@ public class Transfer extends SubsystemBase {
         this.intake = intake;
         this.shooter = shooter;
         this.telemetry = telemetry;
+        this.isAllianceRed = isAllianceRed;
 
         // init transfer servo to pollen
         setTransferServo(SERVO_POLLEN);
@@ -54,9 +56,15 @@ public class Transfer extends SubsystemBase {
 
     public void toggleTransferServo() {
         isNectar = !isNectar;
+        Shooter.LightState correctedState;
+        if (isAllianceRed) {
+            correctedState = Shooter.LightState.RED;
+        } else {
+            correctedState = Shooter.LightState.BLUE;
+        }
         if (isNectar) {
             setTransferServo(SERVO_NECTAR);
-            shooter.indicatorSet(Shooter.LightState.PURPLE);
+            shooter.indicatorSet(correctedState);
         } else {
             setTransferServo(SERVO_POLLEN);
             shooter.indicatorSet(Shooter.LightState.YELLOW);

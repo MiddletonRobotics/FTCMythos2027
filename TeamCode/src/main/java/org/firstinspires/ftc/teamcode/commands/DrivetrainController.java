@@ -12,17 +12,20 @@ public class DrivetrainController extends CommandBase {
     private final DoubleSupplier forwardSupplier;
     private final DoubleSupplier strafeSupplier;
     private final DoubleSupplier rotationSupplier;
+    private final double headingOffset;
 
     public DrivetrainController(
             Drivetrain subsystem,
             DoubleSupplier forward,
             DoubleSupplier strafe,
-            DoubleSupplier rotation) {
+            DoubleSupplier rotation,
+            double headingOffset) {
 
         drivetrain = subsystem;
         forwardSupplier = forward;
         strafeSupplier = strafe;
         rotationSupplier = rotation;
+        this.headingOffset = headingOffset;
 
         addRequirements(drivetrain);
     }
@@ -32,7 +35,8 @@ public class DrivetrainController extends CommandBase {
         drivetrain.drive(
                 forwardSupplier.getAsDouble(),
                 strafeSupplier.getAsDouble(),
-                rotationSupplier.getAsDouble()
+                rotationSupplier.getAsDouble(),
+                headingOffset
         );
     }
 }

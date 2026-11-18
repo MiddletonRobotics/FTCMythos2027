@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.utilities.PoseStorage;
 
  @Autonomous(name = "ForwardLeaveAuto", group = "Autonomous")
     public class ForwardLeaveAuto extends LinearOpMode {
@@ -46,6 +47,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
             while (opModeIsActive()) {
                 follower.update();
                 Scheduler.execute();
+                PoseStorage.currentPose = follower.pose();
 
                 telemetry.addData("x", follower.pose().x());
                 telemetry.addData("y", follower.pose().y());

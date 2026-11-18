@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.pedropathing.follower.Follower;
+import com.pedropathing.follower.ManualDrive;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 
@@ -13,8 +14,13 @@ public class Drivetrain extends SubsystemBase {
         follower = Constants.createFollower(hMap);
     }
 
-    public void drive(double forward, double strafe, double rotation) {
-        follower.manual(forward, strafe, rotation);
+    public void drive(double forward, double strafe, double rotation, double headingOffset) {
+        follower.manual(ManualDrive.fieldCentric(
+                forward,
+                strafe,
+                rotation,
+                follower.pose().heading() + headingOffset
+        ));
     }
 
     @Override

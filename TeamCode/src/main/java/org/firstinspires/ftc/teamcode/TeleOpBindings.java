@@ -121,12 +121,13 @@ public class TeleOpBindings {
         cycleBlockers.whileActiveOnce(new InstantCommand(shooter::toggleBlockers));
     }
 
-    public void configureDefaultCommands() {
+    public void configureDefaultCommands(double headingOffset) {
         drivetrain.setDefaultCommand(new DrivetrainController(
                 drivetrain,
                 () -> -driver1.getLeftY(),
                 () -> driver1.getLeftX(),
-                () -> driver1.getRightX()
+                () -> driver1.getRightX(),
+                headingOffset
         ));
     }
 }

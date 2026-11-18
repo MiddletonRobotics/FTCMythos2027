@@ -10,18 +10,23 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
 import org.firstinspires.ftc.teamcode.subsystems.Transfer;
+import org.firstinspires.ftc.teamcode.utilities.PoseStorage;
 
-@TeleOp(name = "MainTeleOp")
-public class MainTeleOp extends CommandOpMode {
+@TeleOp(name = "BlueTeleOp", group = "TeleOp")
+public class BlueTeleOp extends CommandOpMode {
     @Override
     public void initialize() {
         Drivetrain drivetrain = new Drivetrain(hardwareMap);
         Intake intake = new Intake(hardwareMap, telemetry);
         Deflower deflower = new Deflower(hardwareMap, telemetry);
         Shooter shooter = new Shooter(hardwareMap, telemetry);
-        Transfer transfer = new Transfer(hardwareMap, intake, shooter, telemetry);
+        Transfer transfer = new Transfer(hardwareMap, intake, shooter, telemetry, false);
 
-        drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(0)));
+        if (PoseStorage.currentPose != null) {
+            drivetrain.getFollower().setPose(PoseStorage.currentPose);
+        } else {
+            drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(180)));
+        }
 
         GamepadEx driver1 = new GamepadEx(gamepad1);
         GamepadEx driver2 = new GamepadEx(gamepad2);
@@ -29,7 +34,7 @@ public class MainTeleOp extends CommandOpMode {
         TeleOpBindings bindings = new TeleOpBindings(driver1, driver2, drivetrain, intake, deflower, transfer, shooter);
 
         bindings.controlMap();
-        bindings.configureDefaultCommands();
+        bindings.configureDefaultCommands(Math.PI);
     }
 
     @Override
