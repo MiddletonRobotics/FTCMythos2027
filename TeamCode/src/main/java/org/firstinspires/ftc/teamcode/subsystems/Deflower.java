@@ -23,12 +23,14 @@ public class Deflower extends SubsystemBase {
     }
 
     public void periodic() {
-        String flowerState = "";
+        String flowerState;
         int cleanState = getFlowerClean();
         if (cleanState == 1) {
             flowerState = "Deflower Retracted";
         } else if (cleanState == 2) {
             flowerState = "Deflower Deployed";
+        } else {
+            flowerState = "Probably some floating point error.";
         }
         telemetry.addData("Deflower State", flowerState);
     }

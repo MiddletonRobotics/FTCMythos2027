@@ -29,7 +29,7 @@ public class ColorSensor extends CommandOpMode {
         telemetryData.addData("Blue", blue);
         telemetryData.addData("Alpha", alpha);
 
-        String detected = "";
+        String detected;
 
         if (red < 100 && green < 100 && blue < 100) {
             detected = "Nothing";
@@ -39,6 +39,8 @@ public class ColorSensor extends CommandOpMode {
             detected = "Blue Nectar";
         } else if (red > 800 && green > 300 && blue > 150) {
             detected = "Red Nectar";
+        } else {
+            detected = "Unknown";
         }
 
         telemetryData.addData("Detected", detected);
