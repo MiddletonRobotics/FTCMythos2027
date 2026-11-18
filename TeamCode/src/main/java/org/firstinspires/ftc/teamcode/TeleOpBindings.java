@@ -9,7 +9,7 @@ import com.seattlesolvers.solverslib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.teamcode.commands.DrivetrainController;
 import org.firstinspires.ftc.teamcode.commands.IntakeTransfer;
-import org.firstinspires.ftc.teamcode.subsystems.Deflower;
+import org.firstinspires.ftc.teamcode.subsystems.Depollinator;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Shooter;
@@ -22,7 +22,7 @@ public class TeleOpBindings {
     private final GamepadEx driver1;
     private final Drivetrain drivetrain;
     private final Intake intake;
-    private final Deflower deflower;
+    private final Depollinator depollinator;
     private final Transfer transfer;
     private final Shooter shooter;
 
@@ -41,18 +41,18 @@ public class TeleOpBindings {
     private final Trigger combinedIn;
     private final GamepadButton combinedOut;
 
-    // Flower
-    private final GamepadButton flowerToggle;
+    // depollinate
+    private final GamepadButton depollinateToggle;
 
     // shooter button declarations
     private final Trigger shooterForward;
     private final GamepadButton cycleBlockers;
 
-    public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Deflower deflower, Transfer transfer, Shooter shooter) {
+    public TeleOpBindings(GamepadEx driver1, GamepadEx driver2, Drivetrain drivetrain, Intake intake, Depollinator depollinator, Transfer transfer, Shooter shooter) {
         this.driver1 = driver1;
         this.drivetrain = drivetrain;
         this.intake = intake;
-        this.deflower = deflower;
+        this.depollinator = depollinator;
         this.transfer = transfer;
         this.shooter = shooter;
 
@@ -71,8 +71,8 @@ public class TeleOpBindings {
         combinedIn = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.1);
         combinedOut = new GamepadButton(driver1, GamepadKeys.Button.LEFT_BUMPER);
 
-        // Flower
-        flowerToggle = new GamepadButton(driver1, GamepadKeys.Button.B);
+        // depollinate
+        depollinateToggle = new GamepadButton(driver1, GamepadKeys.Button.B);
 
         // shooter
         shooterForward = new Trigger(() -> driver1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.1);
@@ -110,8 +110,8 @@ public class TeleOpBindings {
         combinedIn.whileActiveContinuous(new IntakeTransfer(intake, transfer, -1));
         combinedOut.whileActiveContinuous(new IntakeTransfer(intake, transfer, 1));
 
-        // deflower
-        flowerToggle.whileActiveOnce(new InstantCommand(deflower::toggleDeflower));
+        // depolliate
+        depollinateToggle.whileActiveOnce(new InstantCommand(depollinator::toggleDepollinate));
 
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(
