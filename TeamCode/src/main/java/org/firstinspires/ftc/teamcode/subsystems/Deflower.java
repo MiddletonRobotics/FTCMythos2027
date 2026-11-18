@@ -21,7 +21,7 @@ public class Deflower extends SubsystemBase {
         leftDeflower = new ServoEx(hMap, "leftDeflower", 0, 300);
         rightDeflower = new ServoEx(hMap, "rightDeflower", 0, 300);
 
-        back();
+        deflowerBack();
 
         this.telemetry = telemetry;
     }
@@ -36,7 +36,7 @@ public class Deflower extends SubsystemBase {
         isDeployed = true;
     }
 
-    public void back() {
+    public void deflowerBack() {
         leftDeflower.set(DEFLOWER_ANGLE);
         rightDeflower.set(BACK_ANGLE);
         isDeployed = false;
@@ -47,7 +47,7 @@ public class Deflower extends SubsystemBase {
         if (isDeployed) {
             deflower();
         } else {
-            back();
+            deflowerBack();
         }
     }
 }
