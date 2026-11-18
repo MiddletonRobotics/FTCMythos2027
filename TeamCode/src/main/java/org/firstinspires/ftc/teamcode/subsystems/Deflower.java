@@ -21,6 +21,8 @@ public class Deflower extends SubsystemBase {
         leftDeflower = new ServoEx(hMap, "leftDeflower", 0, 300);
         rightDeflower = new ServoEx(hMap, "rightDeflower", 0, 300);
 
+        back();
+
         this.telemetry = telemetry;
     }
 

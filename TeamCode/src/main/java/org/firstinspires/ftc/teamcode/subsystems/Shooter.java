@@ -61,6 +61,8 @@ public class Shooter extends SubsystemBase {
         setVeloCoefficients(kp, ki, kd);
         setFeedforwardCoefficients(ks, kv);
 
+        blockersUp();
+
         this.telemetry = telemetry;
     }
 
