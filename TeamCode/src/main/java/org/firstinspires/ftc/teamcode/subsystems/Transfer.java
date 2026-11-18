@@ -17,9 +17,12 @@ public class Transfer extends SubsystemBase {
     private final ServoEx transferServo;
 
     private final Intake intake;
+    private final Shooter shooter;
     private final Telemetry telemetry;
 
-    public Transfer(final HardwareMap hMap, Intake intake, Telemetry telemetry) {
+    private boolean isNectar = false;
+
+    public Transfer(final HardwareMap hMap, Intake intake, Shooter shooter, Telemetry telemetry) {
         nectarMotor = new Motor(hMap, "nectarMotor", Motor.GoBILDA.RPM_312);
         pollenMotor = new Motor(hMap, "pollenMotor", Motor.GoBILDA.RPM_312);
         transferServo = new ServoEx(hMap, "transferServo", 0, 355);
@@ -28,29 +31,40 @@ public class Transfer extends SubsystemBase {
         pollenMotor.setRunMode(Motor.RunMode.RawPower);
 
         this.intake = intake;
+        this.shooter = shooter;
         this.telemetry = telemetry;
+
+        // init transfer servo to pollen
+        setTransferServo(SERVO_POLLEN);
     }
 
     public void periodic() {
-        // transfer servo update
+        // transfer servo update from color sensor
         Intake.BallColor color = intake.getBallColor();
         if (color == Intake.BallColor.POLLEN) {
             setTransferServo(SERVO_POLLEN);
+            isNectar = false;
         } else if (color == Intake.BallColor.NECTAR) {
             setTransferServo(SERVO_NECTAR);
+            isNectar = true;
         }
 
-        // position monitor
-        String servoState;
-        int cleanState = getTransferServoClean();
-        if (cleanState == 1) {
-            servoState = "Pollen";
-        } else if (cleanState == 2) {
-            servoState = "Nectar";
+        telemetry.addData("Transfer State", isNectar ? "Nectar" : "Pollen");
+    }
+
+    public void toggleTransferServo() {
+        isNectar = !isNectar;
+        if (isNectar) {
+            setTransferServo(SERVO_NECTAR);
+            shooter.indicatorSet(Shooter.LightState.PURPLE);
         } else {
-            servoState = "Middle";
+            setTransferServo(SERVO_POLLEN);
+            shooter.indicatorSet(Shooter.LightState.YELLOW);
         }
-        telemetry.addData("Transfer Servo State", servoState);
+    }
+
+    public boolean isNectar() {
+        return isNectar;
     }
 
     public void setPollenMotor(double power) {
@@ -68,22 +82,5 @@ public class Transfer extends SubsystemBase {
 
     public void setTransferServo(double angle) {
         transferServo.set(angle);
-    }
-
-    public double getTransferServo() {
-        return transferServo.get();
-    }
-
-    // one is for pollen
-    // two is for nectar
-    // three is for middle or any other state
-    public int getTransferServoClean() {
-       if (Math.abs(getTransferServo() - SERVO_POLLEN) < 1.0) {
-           return 1;
-       } else if (Math.abs(getTransferServo() - SERVO_NECTAR) < 1.0) {
-           return 2;
-       } else {
-           return 3;
-       }
     }
 }

@@ -52,13 +52,10 @@ public class IntakeTransfer extends CommandBase {
 
     @Override
     public void initialize() {
-        int clean = transfer.getTransferServoClean();
-        if (clean == 1) {
-            transferMotor = TransferMotor.POLLEN;
-        } else if (clean == 2) {
+        if (transfer.isNectar()) {
             transferMotor = TransferMotor.NECTAR;
         } else {
-            transferMotor = TransferMotor.BOTH;
+            transferMotor = TransferMotor.POLLEN;
         }
         runMotors();
     }

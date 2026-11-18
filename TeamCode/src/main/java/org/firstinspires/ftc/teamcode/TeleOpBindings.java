@@ -104,39 +104,21 @@ public class TeleOpBindings {
                 () -> transfer.setTransferMotors(-1),
                 () -> transfer.setTransferMotors(0)
         ));
-        transferToggle.whileActiveOnce(new InstantCommand(() -> {
-            if (transfer.getTransferServoClean() == 1) {
-                transfer.setTransferServo(transfer.SERVO_NECTAR);
-            } else if (transfer.getTransferServoClean() == 2) {
-                transfer.setTransferServo(transfer.SERVO_POLLEN);
-            }
-        }));
+        transferToggle.whileActiveOnce(new InstantCommand(transfer::toggleTransferServo));
 
         // combined
         combinedIn.whileActiveContinuous(new IntakeTransfer(intake, transfer, -1));
         combinedOut.whileActiveContinuous(new IntakeTransfer(intake, transfer, 1));
 
         // deflower
-        flowerToggle.whileActiveOnce(new InstantCommand(() -> {
-            if (deflower.getFlowerClean() == 1) {
-                deflower.deflower();
-            } else {
-                deflower.back();
-            }
-        }));
+        flowerToggle.whileActiveOnce(new InstantCommand(deflower::toggleDeflower));
 
         // shooter
         shooterForward.whileActiveContinuous(new StartEndCommand(
                 () -> shooter.setVelocity(SHOOTER_DESIRED_RPM),
                 () -> shooter.set(0)
         ));
-        cycleBlockers.whileActiveOnce(new InstantCommand(() -> {
-            if (shooter.getBlockersClean() == 1) {
-                shooter.blockersDown();
-            } else {
-                shooter.blockersUp();
-            }
-        }));
+        cycleBlockers.whileActiveOnce(new InstantCommand(shooter::toggleBlockers));
     }
 
     public void configureDefaultCommands() {

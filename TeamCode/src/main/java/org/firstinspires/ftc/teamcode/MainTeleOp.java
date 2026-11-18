@@ -18,8 +18,8 @@ public class MainTeleOp extends CommandOpMode {
         Drivetrain drivetrain = new Drivetrain(hardwareMap);
         Intake intake = new Intake(hardwareMap, telemetry);
         Deflower deflower = new Deflower(hardwareMap, telemetry);
-        Transfer transfer = new Transfer(hardwareMap, intake, telemetry);
         Shooter shooter = new Shooter(hardwareMap, telemetry);
+        Transfer transfer = new Transfer(hardwareMap, intake, shooter, telemetry);
 
         drivetrain.getFollower().setPose(new Pose(0, 0, Math.toRadians(0)));
 

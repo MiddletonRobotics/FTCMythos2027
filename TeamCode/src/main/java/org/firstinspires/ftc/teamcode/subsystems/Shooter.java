@@ -21,8 +21,11 @@ public class Shooter extends SubsystemBase {
     private final MotorEx shooter;
     private final ServoEx pollenBlocker;
     private final ServoEx nectarBlocker;
+    private final ServoEx indicator;
     private final VoltageSensor voltageSensor;
     private final Telemetry telemetry;
+
+    private boolean areBlockersDown = false;
 
     public static double kp = 1.25;
     public static double ki = 0.0;
@@ -32,10 +35,25 @@ public class Shooter extends SubsystemBase {
 
     public static double nominalVoltage = 13.0;
 
+    public enum LightState {
+        OFF(0.0),
+        WHITE(1.0),
+        RED(0.28),
+        BLUE(0.666),
+        PURPLE(0.722),
+        YELLOW(0.388);
+
+        public final double pwmValue;
+        LightState(double pwmValue) {
+            this.pwmValue = pwmValue;
+        }
+    }
+
     public Shooter(final HardwareMap hMap, Telemetry telemetry) {
         shooter = new MotorEx(hMap, "shooter", Motor.GoBILDA.BARE);
         pollenBlocker = new ServoEx(hMap, "pollenBlocker", 0, 355);
         nectarBlocker = new ServoEx(hMap, "nectarBlocker", 0, 355);
+        indicator = new ServoEx(hMap, "indicator");
         voltageSensor = hMap.voltageSensor.iterator().next();
 
         shooter.setRunMode(Motor.RunMode.VelocityControl);
@@ -54,26 +72,15 @@ public class Shooter extends SubsystemBase {
         double rpm = MotorMath.ticksPerSecondToRPM(ticksPerSecond, MotorMath.GoBildaMotor.RPM_6000);
 
         telemetry.addData("Shooter RPM", rpm);
-
-        String pollenState;
-        if (getPollenBlockerClean() == 2) {
-            pollenState = "Blocking";
-        } else {
-            pollenState = "Not Blocking";
-        }
-        telemetry.addData("Pollen Blocker", pollenState);
-
-        String nectarState;
-        if (getNectarBlockerClean() == 2) {
-            nectarState = "Blocking";
-        } else {
-            nectarState = "Not Blocking";
-        }
-        telemetry.addData("Nectar Blocker", nectarState);
+        telemetry.addData("Blockers State", areBlockersDown ? "Down" : "Up");
     }
 
     public void pollenBlockerUp() {
         pollenBlocker.set(0);
+    }
+
+    public void indicatorSet(LightState state) {
+        indicator.set(state.pwmValue);
     }
 
     public void pollenBlockerDown() {
@@ -91,6 +98,26 @@ public class Shooter extends SubsystemBase {
     public void blockersDown() {
         pollenBlockerDown();
         nectarBlockerDown();
+        areBlockersDown = true;
+    }
+
+    public void blockersUp() {
+        pollenBlockerUp();
+        nectarBlockerUp();
+        areBlockersDown = false;
+    }
+
+    public void toggleBlockers() {
+        areBlockersDown = !areBlockersDown;
+        if (areBlockersDown) {
+            blockersDown();
+        } else {
+            blockersUp();
+        }
+    }
+
+    public boolean isAreBlockersDown() {
+        return areBlockersDown;
     }
 
     public double getNectarBlocker() {
@@ -99,44 +126,6 @@ public class Shooter extends SubsystemBase {
 
     public double getPollenBlocker() {
         return pollenBlocker.get();
-    }
-
-    // one is up
-    // two is down
-    public int getPollenBlockerClean() {
-        if (getPollenBlocker() == 0) {
-            return 1;
-        } else {
-            return 2;
-        }
-    }
-
-    // one is up
-    // two is down
-    public int getNectarBlockerClean() {
-        if (getNectarBlocker() == SERVO_ANGLE) {
-            return 1;
-        } else {
-            return 2;
-        }
-    }
-
-    // one is both up
-    // two is both down
-    // three is anything else
-    public int getBlockersClean() {
-        if (getPollenBlockerClean() == 1 && getNectarBlockerClean() == 1) {
-            return 1;
-        } else if (getPollenBlockerClean() == 2 && getNectarBlockerClean() == 2) {
-            return 2;
-        } else {
-            return 3;
-        }
-    }
-
-    public void blockersUp() {
-        pollenBlockerUp();
-        nectarBlockerUp();
     }
 
     public void setVelocity(double rpm) {

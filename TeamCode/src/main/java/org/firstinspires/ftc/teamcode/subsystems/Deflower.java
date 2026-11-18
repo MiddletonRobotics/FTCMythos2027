@@ -15,6 +15,8 @@ public class Deflower extends SubsystemBase {
 
     private final Telemetry telemetry;
 
+    private boolean isDeployed = false;
+
     public Deflower(HardwareMap hMap, Telemetry telemetry) {
         leftDeflower = new ServoEx(hMap, "leftDeflower", 0, 300);
         rightDeflower = new ServoEx(hMap, "rightDeflower", 0, 300);
@@ -23,38 +25,27 @@ public class Deflower extends SubsystemBase {
     }
 
     public void periodic() {
-        String flowerState;
-        int cleanState = getFlowerClean();
-        if (cleanState == 1) {
-            flowerState = "Deflower Retracted";
-        } else if (cleanState == 2) {
-            flowerState = "Deflower Deployed";
-        } else {
-            flowerState = "Probably some floating point error.";
-        }
-        telemetry.addData("Deflower State", flowerState);
+        telemetry.addData("Deflower State", isDeployed ? "Deployed" : "Retracted");
     }
 
     public void deflower() {
-        leftDeflower.set(DEFLOWER_ANGLE);
+        leftDeflower.set(BACK_ANGLE);
         rightDeflower.set(DEFLOWER_ANGLE);
+        isDeployed = true;
     }
 
     public void back() {
-        leftDeflower.set(BACK_ANGLE);
+        leftDeflower.set(DEFLOWER_ANGLE);
         rightDeflower.set(BACK_ANGLE);
+        isDeployed = false;
     }
 
-    // one is for retracted
-    // two is for deployed
-    // three is for anything else
-    public int getFlowerClean() {
-        if (leftDeflower.get() == BACK_ANGLE && rightDeflower.get() == BACK_ANGLE) {
-            return 1;
-        } else if (leftDeflower.get() == DEFLOWER_ANGLE && rightDeflower.get() == DEFLOWER_ANGLE) {
-            return 2;
+    public void toggleDeflower() {
+        isDeployed = !isDeployed;
+        if (isDeployed) {
+            deflower();
         } else {
-            return 3;
+            back();
         }
     }
 }
