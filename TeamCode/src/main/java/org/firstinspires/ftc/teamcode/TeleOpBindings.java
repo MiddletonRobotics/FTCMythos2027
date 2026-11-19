@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.seattlesolvers.solverslib.command.FunctionalCommand;
 import com.seattlesolvers.solverslib.command.InstantCommand;
+import com.seattlesolvers.solverslib.command.RunCommand;
 import com.seattlesolvers.solverslib.command.StartEndCommand;
 import com.seattlesolvers.solverslib.command.button.GamepadButton;
 import com.seattlesolvers.solverslib.command.button.Trigger;
@@ -125,9 +127,12 @@ public class TeleOpBindings {
         depollinateToggle.whileActiveOnce(new InstantCommand(depollinator::toggleDepollinate));
 
         // shooter
-        shooterForward.whileActiveContinuous(new StartEndCommand(
+        shooterForward.whileActiveContinuous(new FunctionalCommand(
+                () -> {},
                 () -> shooter.setVelocity(SHOOTER_DESIRED_RPM),
-                () -> shooter.set(0)
+                interrupted -> shooter.set(0),
+                () -> false,
+                shooter
         ));
         cycleBlockers.whileActiveOnce(new InstantCommand(shooter::toggleBlockers));
     }

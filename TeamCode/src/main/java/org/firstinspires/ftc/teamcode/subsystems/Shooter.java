@@ -28,11 +28,11 @@ public class Shooter extends SubsystemBase {
 
     private boolean areBlockersDown = false;
 
-    public static double kp = 1.25;
+    public static double kp = 0.25;
     public static double ki = 0.0;
-    public static double kd = 0.2;
+    public static double kd = 0.0;
     public static double ks = 0.0;
-    public static double kv = 0.0;
+    public static double kv = 1.2;
 
     public static double nominalVoltage = 13.0;
 
@@ -83,11 +83,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void pollenBlockerUp() {
-        pollenBlocker.set(0);
+        pollenBlocker.set(SERVO_ANGLE);
     }
 
     public void pollenBlockerDown() {
-        pollenBlocker.set(SERVO_ANGLE);
+        pollenBlocker.set(0);
     }
 
     public void nectarBlockerUp() {
