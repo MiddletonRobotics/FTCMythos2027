@@ -8,7 +8,7 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Transfer extends SubsystemBase {
-    public final Double SERVO_NECTAR = (73.0 * 0.8);
+    public final Double SERVO_NECTAR = (75.0 * 0.8);
     public final Double SERVO_MIDDLE = (30.0 * 0.8);
     public final Double SERVO_POLLEN = 0.0;
 
@@ -36,19 +36,23 @@ public class Transfer extends SubsystemBase {
         this.telemetry = telemetry;
         this.isAllianceRed = isAllianceRed;
 
-        // init transfer servo to pollen
+        // init transfer servo and indicator to pollen
         setTransferServo(SERVO_POLLEN);
+        shooter.indicatorSet(Shooter.LightState.YELLOW);
     }
 
     public void periodic() {
         // transfer servo update from color sensor
         Intake.BallColor color = intake.getBallColor();
+        Shooter.LightState correctedState = isAllianceRed ? Shooter.LightState.RED : Shooter.LightState.BLUE;
         if (color == Intake.BallColor.POLLEN) {
             setTransferServo(SERVO_POLLEN);
             isNectar = false;
+            shooter.indicatorSet(Shooter.LightState.YELLOW);
         } else if (color == Intake.BallColor.NECTAR) {
             setTransferServo(SERVO_NECTAR);
             isNectar = true;
+            shooter.indicatorSet(correctedState);
         }
 
         telemetry.addData("Transfer State", isNectar ? "Nectar" : "Pollen");

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.bylazar.configurables.annotations.Configurable;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.seattlesolvers.solverslib.command.SubsystemBase;
 import com.seattlesolvers.solverslib.hardware.motors.Motor;
 import com.seattlesolvers.solverslib.hardware.motors.MotorEx;
@@ -16,12 +17,12 @@ import com.seattlesolvers.solverslib.hardware.servos.ServoEx;
 @Config
 @Configurable
 public class Shooter extends SubsystemBase {
-    private final Double SERVO_ANGLE = 90.0;
+    private final Double SERVO_ANGLE = 50.0;
 
     private final MotorEx shooter;
     private final ServoEx pollenBlocker;
     private final ServoEx nectarBlocker;
-    private final ServoEx indicator;
+    private final Servo indicator;
     private final VoltageSensor voltageSensor;
     private final Telemetry telemetry;
 
@@ -53,7 +54,7 @@ public class Shooter extends SubsystemBase {
         shooter = new MotorEx(hMap, "shooter", Motor.GoBILDA.BARE);
         pollenBlocker = new ServoEx(hMap, "pollenBlocker", 0, 355);
         nectarBlocker = new ServoEx(hMap, "nectarBlocker", 0, 355);
-        indicator = new ServoEx(hMap, "indicator");
+        indicator = hMap.get(Servo.class, "indicator");
         voltageSensor = hMap.voltageSensor.iterator().next();
 
         shooter.setRunMode(Motor.RunMode.VelocityControl);
@@ -77,12 +78,12 @@ public class Shooter extends SubsystemBase {
         telemetry.addData("Blockers State", areBlockersDown ? "Down" : "Up");
     }
 
-    public void pollenBlockerUp() {
-        pollenBlocker.set(0);
+    public void indicatorSet(LightState state) {
+        indicator.setPosition(state.pwmValue);
     }
 
-    public void indicatorSet(LightState state) {
-        indicator.set(state.pwmValue);
+    public void pollenBlockerUp() {
+        pollenBlocker.set(0);
     }
 
     public void pollenBlockerDown() {
@@ -116,18 +117,6 @@ public class Shooter extends SubsystemBase {
         } else {
             blockersUp();
         }
-    }
-
-    public boolean isAreBlockersDown() {
-        return areBlockersDown;
-    }
-
-    public double getNectarBlocker() {
-        return nectarBlocker.get();
-    }
-
-    public double getPollenBlocker() {
-        return pollenBlocker.get();
     }
 
     public void setVelocity(double rpm) {

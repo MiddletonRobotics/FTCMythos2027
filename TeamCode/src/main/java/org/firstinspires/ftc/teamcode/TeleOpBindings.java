@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Transfer;
 
 public class TeleOpBindings {
     // constants
-    private static final int SHOOTER_DESIRED_RPM = 3500;
+    private static final int SHOOTER_DESIRED_RPM = 3400;
 
     private final GamepadEx driver1;
     private final Drivetrain drivetrain;
@@ -44,7 +44,7 @@ public class TeleOpBindings {
     // depollinate
     private final GamepadButton depollinateToggle;
 
-    // shooter button declarations
+    // shooter
     private final Trigger shooterForward;
     private final GamepadButton cycleBlockers;
 
@@ -100,8 +100,7 @@ public class TeleOpBindings {
                         transfer.setPollenMotor(-1);
                     }
                 },
-                () -> transfer.setTransferMotors(0)
-        ));
+                () -> transfer.setTransferMotors(0)));
         transferSideOut.whileActiveContinuous(new StartEndCommand(
                 () -> {
                     if (transfer.isNectar()) {
